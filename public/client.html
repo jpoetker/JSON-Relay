@@ -15,7 +15,7 @@
 		$(document).ready(function() {
 			
 			function subscribeTo(path, update_callback) {
-				var socket = io.connect('http://localhost' + path);
+				var socket = io.connect(path);
 				socket.on('connect', function() {
 					console.log("connected to " + path);
 				});
