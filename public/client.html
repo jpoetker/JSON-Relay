@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+	<script src="/socket.io/socket.io.js" async defer></script>
+	
+</head>
+<body>
+	<input type='text' id='path' />
+	<button id="subscribe">Subscribe</button>
+	<div id="output" />	
+	<script type="text/javascript" charset="utf-8" async defer>
+		$(document).ready(function() {
+			
+			function subscribeTo(path, update_callback) {
+				var socket = io.connect('http://localhost' + path);
+				socket.on('connect', function() {
+					console.log("connected to " + path);
+				});
+				socket.on('update', function(data) {
+					console.log(data);
+					if (update_callback) {
+						update_callback(data);
+					}
+				});
+			}
+			
+			$('#subscribe').click(function() {
+				subscribeTo($('#path').val(), function(data) {
+					$('#output').append(JSON.stringify(data) + "<br />");
+				});
+			});
+		});
+	</script>
+</body>
+</html>
