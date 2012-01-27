@@ -16,11 +16,13 @@ function configureSocket(name) {
 		});
 	}
 }
+
 var server = connect.createServer(
 	connect.static(__dirname + '/public', {maxAge: 0}),
 	connect.router(function(app) {
-		app.get('*.json', function(req, res) {
-			var url = req.originalUrl;
+
+		app.get('*.json', function(req, res, next) {
+			var url = req.url;
 			var obj = objects[url];
 			
 			if (obj) {
@@ -35,15 +37,15 @@ var server = connect.createServer(
 		app.post('*.json', function(req, res) {
 			var data = '';
 			
-			console.log("receiving for " + req.originalUrl);
+			console.log("receiving for " + req.url);
 			req.on('data', function(chunk) {
 				data += chunk;
 			});
 			req.on('end', function() {
 				var obj = null;
 
-				var url = req.originalUrl;
-				if (data && (data.length > 0)) {
+				var url = req.url;
+				if (data && (data.length > 0) && (url !== 'index.json')) {
 					// do this first - if the namespace hasn't been set up
 					configureSocket(url);	
 									
@@ -66,6 +68,6 @@ var server = connect.createServer(
 	})
 );
 
-server.listen(3000);
+server.listen((process.argv.length === 3) ? process.argv[2] : 3000);
 
 socket = io.listen(server);
