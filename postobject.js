@@ -13,7 +13,7 @@ if (process.argv.length === 4) {
 	var parsedUrl = URL.parse(url);
 	
 	var headers = {
-		'Host': 'localhost',
+		'Host': parsedUrl.hostname,
 		'Content-Type': 'application/json',
 		'Content-Length': Buffer.byteLength(json, 'utf8')
 	};
