@@ -45,11 +45,13 @@ npm install socket.io
 ```
 
 To start the JSON Relay service on port 3000:
+
 ```
 node app.js
 ```
 
 To specify a different port (let's say 8080), just add it as a command line argument like so:
+
 ```
 node app.js 8080
 ```
