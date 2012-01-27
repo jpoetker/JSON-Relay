@@ -1,4 +1,5 @@
-var http = require('http');
+var http = require('http'),
+	URL = require('url');
 
 console.log(process.argv);
 
@@ -9,15 +10,18 @@ if (process.argv.length === 4) {
 	var obj = JSON.parse(originalJson);
 	var json = JSON.stringify(obj);
 	
+	var parsedUrl = URL.parse(url);
+	
 	var headers = {
 		'Host': 'localhost',
 		'Content-Type': 'application/json',
 		'Content-Length': Buffer.byteLength(json, 'utf8')
 	};
 	
-	var client = http.createClient(3000, 'localhost');
+	console.log("creating client for: " + parsedUrl.hostname + ":" + (parsedUrl.port || 80));
+	var client = http.createClient(parsedUrl.port || 80, parsedUrl.hostname);
 	
-	var request = client.request('POST', url, headers);
+	var request = client.request('POST', parsedUrl.path, headers);
 	request.on('response', function(response) {
 		var data = '';
 		response.on('data', function(chunk) {
@@ -31,5 +35,5 @@ if (process.argv.length === 4) {
 	request.end();
 	
 } else {
-	console.log("Usage: node postobject.js <path> <json>");
+	console.log("Usage: node postobject.js <url> <json>");
 }
