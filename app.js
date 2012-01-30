@@ -71,3 +71,15 @@ var server = connect.createServer(
 server.listen((process.argv.length === 3) ? process.argv[2] : 3000);
 
 socket = io.listen(server);
+
+socket.enable('browser client minification');
+socket.enable('browser client etag');
+socket.enable('browser client gzip');
+socket.set('log level', 1);
+socket.set('transports', [
+    'websocket'
+  , 'flashsocket'
+  , 'htmlfile'
+  , 'xhr-polling'
+  , 'jsonp-polling'
+]);
